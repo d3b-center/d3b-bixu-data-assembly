@@ -12,37 +12,17 @@ suppressPackageStartupMessages(library(stringr))
 
 # read params
 option_list <- list(
-  make_option(c("--inputdir"),
+  make_option(c("--input_rsem"),
     type = "character",
     help = "Input directory for RSEM files"
-  ),
-  make_option(c("--manifest"),
-    type = "character",
-    help = "Manifest file "
-  ),
-  make_option(c("--manifest_format"),
-              type = "character", default = "csv",
-              help = "csv if manifest downloaded from cavatic GUI,json/yaml format if provided by bix-ops"
   ),
   make_option(c("--outdir"),
     type = "character",
     help = "Path to output directory"
   ),
-  make_option(c("-d", "--download"),
-    type = "logical",
-    help = "download from cavatica", default = TRUE
-  ),
-  make_option(c("-u", "--username"),
-    type = "character",
-    help = "if download= TRUE mandatory;  cavatica username "
-  ),
-  make_option(c("-p", "--projectid"),
-    type = "character",
-    help = " if download= TRUE mandatory; cavatica project id"
-  ),
   make_option(c("-m", "--mergefiles"),
-              type = "logical",default=TRUE,
-              help = " TRUE to merge file and FALSE when only need them downloaded"
+    type = "logical",default=TRUE,
+    help = " TRUE to merge file and FALSE when only need them downloaded"
   ),
   make_option(c("-c", "--old_rsem_count"),
     type = "character",
@@ -61,75 +41,38 @@ option_list <- list(
     help = "outname prefix"
   ),
   make_option(c("-l", "--library"),
-              type = "character",
-              help = "outname prefix"
+    type = "character",
+    help = "outname prefix"
+  ),
+  make_option(c("-b", "--biospecimens_id"),
+    type = "character",
+    help = "Biospecimens ID for the RNAseq tumor"
   )
 )
 
 # parse the parameters
 opt <- parse_args(OptionParser(option_list = option_list))
-topDir <- opt$inputdir
-manifest <- opt$manifest
-manifest_format <- opt$manifest_format
+input_rsem <- opt$input_rsem
 outdir <- opt$outdir
-download <- opt$download
-username <- opt$username
-projectid <- opt$projectid
 old_rsem_fpkm <- opt$old_rsem_fpkm
 old_rsem_tpm <- opt$old_rsem_tpm
 old_rsem_count <- opt$old_rsem_count
 outname_prefix <- opt$outname_prefix
 mergefiles <- opt$mergefiles
 library <- opt$library
+bs_id <-opt$biospecimens_id
 
-# read manifest file
-if (manifest_format == "csv"){
-  manifest <- read.csv(manifest, stringsAsFactors = F)
-  manifest <- manifest %>%
-    select(Kids.First.Biospecimen.ID, name, id) %>% dplyr::rename(Kids_First_Biospecimen_ID = Kids.First.Biospecimen.ID)
-} 
-
-
-if (manifest_format=="json" || manifest_format == "yaml"){
-  manifest <- rlist::list.load(manifest)
-  
-  manifest <- data.frame("Kids_First_Biospecimen_ID" = unlist(lapply(manifest$`rnaseq-analysis`,function(x) x$kf_biospecimen_id)),
-                            "name" = unlist(lapply(manifest$`rnaseq-analysis`,function(x) 
-                              gsub(".*[/]","",x$filepath))),
-                            "id" = unlist(lapply(manifest$`rnaseq-analysis`,function(x) x$cavatica_id)))
-  
-}
-
-manifest <- manifest[grep("[.]rsem[.]genes[.]results[.]gz", manifest$name), ]
-
-# read histology file and split into polyA and stranded
-# clin <- read.delim(clin, stringsAsFactors = F)
-# polya <- clin %>%
-#   filter(experimental_strategy == "RNA-Seq" & RNA_library == "poly-A")
-# stranded <- clin %>%
-#   filter(experimental_strategy == "RNA-Seq" & RNA_library == "stranded")
-
-
-if (download) {
-  # download files from manifest
-  source("utils/download-files-manifest.R")
-  print(head(manifest))
-  download_files_manifest(
-    manifest = manifest, username =
-      username, projectid = projectid,
-    outputfolder = topDir
-  )
-}
 
 if (mergefiles) {
   
   # read and merge RSEM genes files
-  lfiles <- list.files(path = topDir, pattern = "*.rsem.genes.results.gz", recursive = TRUE)
+  #lfiles <- list.files(path = topDir, pattern = "*.rsem.genes.results.gz", recursive = TRUE)
+  lfiles <- input_rsem
   read.rsem <- function(x) {
     print(x)
-    dat <- data.table::fread(file.path(topDir, x))
+    dat <- data.table::fread(x)
     filename <- x
-    sample.id <- manifest[which(manifest$name %in% filename), "Kids_First_Biospecimen_ID"]
+    sample.id <- bs_id
     dat$Sample <- sample.id
     return(dat)
   }
@@ -146,9 +89,9 @@ if (mergefiles) {
     as.data.frame()
   
   # merge per gene_id
-  rnaseq.fpkm <- expr.fpkm[, c("gene_id", manifest$Kids_First_Biospecimen_ID)]
-  rnaseq.counts <- expr.counts[, c("gene_id", manifest$Kids_First_Biospecimen_ID)]
-  rnaseq.tpm <- expr.tpm[, c("gene_id", manifest$Kids_First_Biospecimen_ID)]
+  rnaseq.fpkm <- expr.fpkm[, c("gene_id", bs_id)]
+  rnaseq.counts <- expr.counts[, c("gene_id", bs_id)]
+  rnaseq.tpm <- expr.tpm[, c("gene_id", bs_id)]
   
   
   if (!is.null(old_rsem_count)) {
