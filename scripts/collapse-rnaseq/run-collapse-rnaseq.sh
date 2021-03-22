@@ -24,8 +24,8 @@ libraryStrategies=("polya" "stranded")
 for strategy in ${libraryStrategies[@]}; do
 
   Rscript --vanilla 01-summarize_matrices.R \
-    -i /Users/zhangb1/Documents/Kid-First/project/Re-Harmonization/GH-PNOC008/merged_files/20210311-data/pbta-gene-expression-rsem-fpkm.${strategy}.rds \
-    -g /Users/zhangb1/Documents/Kid-First/project/Re-Harmonization/GH-PNOC008/merged_files/gencode.v27.primary_assembly.annotation.gtf.gz \
+    -i pbta-gene-expression-rsem-fpkm.${strategy}.rds \
+    -g gencode.v27.primary_assembly.annotation.gtf.gz \
     -m results/pbta-gene-expression-rsem-fpkm-collapsed.${strategy}.rds \
     -t results/pbta-gene-expression-rsem-fpkm-collapsed_table.${strategy}.rds
 
@@ -35,8 +35,8 @@ done
 libraryStrategies=("polya" "stranded")
 for strategy in ${libraryStrategies[@]}; do
   Rscript --vanilla 01-summarize_matrices.R \
-    -i /Users/zhangb1/Documents/Kid-First/project/Re-Harmonization/GH-PNOC008/merged_files/20210311-data/pbta-gene-expression-rsem-tpm.${strategy}.rds \
-    -g /Users/zhangb1/Documents/Kid-First/project/Re-Harmonization/GH-PNOC008/merged_files/gencode.v27.primary_assembly.annotation.gtf.gz \
+    -i pbta-gene-expression-rsem-tpm.${strategy}.rds \
+    -g gencode.v27.primary_assembly.annotation.gtf.gz \
     -m results/pbta-gene-expression-rsem-tpm-collapsed.${strategy}.rds \
     -t results/pbta-gene-expression-rsem-tpm-collapsed_table.${strategy}.rds
 done

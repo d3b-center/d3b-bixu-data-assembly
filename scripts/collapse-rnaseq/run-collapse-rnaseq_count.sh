@@ -26,8 +26,8 @@ libraryStrategies=("polya" "stranded")
 libraryStrategies=("polya" "stranded")
 for strategy in ${libraryStrategies[@]}; do
   Rscript --vanilla 01-summarize_matrices.R \
-    -i /Users/zhangb1/Documents/Kid-First/project/Re-Harmonization/GH-PNOC008/merged_files/20210311-data/pbta-gene-counts-rsem-expected_count.${strategy}.rds \
-    -g /Users/zhangb1/Documents/Kid-First/project/Re-Harmonization/GH-PNOC008/merged_files/gencode.v27.primary_assembly.annotation.gtf.gz \
+    -i pbta-gene-counts-rsem-expected_count.${strategy}.rds \
+    -g gencode.v27.primary_assembly.annotation.gtf.gz \
     -m results/pbta-gene-counts-rsem-expected_count-collapsed.${strategy}.rds \
     -t results/pbta-gene-counts-rsem-expected_count-collapsed_table.${strategy}.rds
 done

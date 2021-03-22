@@ -2,10 +2,8 @@
 title: "Summary of Ensembl identifiers for RNA-seq matrices"
 output: html_notebook
 params: 
-  polya.annot.table: 
-    value: 'results/pbta-gene-expression-rsem-fpkm-collapsed_table.polya.rds'
-  stranded.annot.table:
-    value: 'results/pbta-gene-expression-rsem-fpkm-collapsed_table.stranded.rds'
+  annot.table: 
+    value: 'pbta-gene-expression-rsem-fpkm-collapsed_table.polya.rds'
 ---
 
 ```{r include = FALSE}
@@ -53,8 +51,8 @@ viewDataTable <- function(dat){
 ```{r, echo = FALSE, warning = FALSE}
 # view full gene annotation for polya data for multi-mapped gene symbols where
 # the correlation is not NA
-polya.annot.table <- readRDS(params$polya.annot.table)
-viewDataTable(polya.annot.table %>% 
+annot.table <- readRDS(params$annot.table)
+viewDataTable(annot.table %>% 
                 dplyr::filter(ensembl_id == "Multiple",
                               !is.na(avg.cor)))
 ```
@@ -63,7 +61,7 @@ viewDataTable(polya.annot.table %>%
 
 ```{r, echo = FALSE, warning = FALSE}
 # view table of dropped identifiers because of zero expression
-dat <- polya.annot.table %>% 
+dat <- annot.table %>% 
   filter(expressed == "No") %>%
   group_by(gene_type)  %>%
   summarise(count = n()) 
@@ -74,41 +72,7 @@ viewDataTable(dat)
 
 ```{r, echo = FALSE, warning = FALSE}
 # view table of dropped identifiers by removing duplicates
-dat <- polya.annot.table %>% 
-  filter(ensembl_id == "Multiple" & keep == "No") %>%
-  group_by(gene_type)  %>%
-  summarise(count = n()) 
-viewDataTable(dat)
-```
-
-### Stranded RNA-seq 
-#### Annotation Table
-
-```{r, echo = FALSE, warning = FALSE}
-# view full gene annotation for stranded data for multi-mapped gene symbols
-# where the correlation is not NA
-stranded.annot.table <- readRDS(params$stranded.annot.table)
-viewDataTable(stranded.annot.table %>% 
-                dplyr::filter(ensembl_id == "Multiple",
-                              !is.na(avg.cor)))
-```
-
-#### Summary of biotypes that are dropped due to low expression:
-
-```{r, echo = FALSE, warning = FALSE}
-# view table of dropped identifiers because of zero expression
-dat <- stranded.annot.table %>% 
-  filter(expressed == "No") %>%
-  group_by(gene_type)  %>%
-  summarise(count = n()) 
-viewDataTable(dat)
-```
-
-#### Summary of biotypes that are dropped due to merging multiple Ensembl identifiers:
-
-```{r, echo = FALSE, warning = FALSE}
-# view table of dropped identifiers by removing duplicates
-dat <- stranded.annot.table %>% 
+dat <- annot.table %>% 
   filter(ensembl_id == "Multiple" & keep == "No") %>%
   group_by(gene_type)  %>%
   summarise(count = n()) 
@@ -127,11 +91,8 @@ _Note: Where `ensembl_id == "Unique"`, correlation values are not calculated._
 
 ```{r}
 data.frame(
-  strategy = c("poly-A", "stranded"),
-  number_of_NA = c(nrow(polya.annot.table %>% 
-                          filter(ensembl_id == "Multiple",
-                                 is.na(avg.cor))),
-                   nrow(stranded.annot.table %>% 
+  #strategy = c("poly-A", "stranded"),
+  number_of_NA = c(nrow(annot.table %>% 
                           filter(ensembl_id == "Multiple",
                                  is.na(avg.cor))))
 )
