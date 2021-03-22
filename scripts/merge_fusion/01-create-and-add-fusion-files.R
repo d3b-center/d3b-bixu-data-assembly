@@ -12,33 +12,17 @@ suppressPackageStartupMessages(library(stringr))
 
 # read params
 option_list <- list(
-  make_option(c("--inputdir"),
+  make_option(c("--input_arriba"),
               type = "character",
-              help = "Input directory for fusion files"
+              help = "Input file for arriba fusion files"
   ),
-  make_option(c("--manifest"),
+  make_option(c("--input_star_fusion"),
               type = "character",
-              help = "Manifest file with cavatica downloaded csv file with colnames `Kids First Biospecimen ID, name, id`, json file with column names  `Kids_First_Biospecimen_ID,filepath,cavatica_id`"
-  ),
-  make_option(c("--manifest_format"),
-              type = "character", default = "csv",
-              help = "csv if manifest downloaded from cavatic GUI,json/yaml format if provided by bix-ops"
+              help = "Input file for star fusion file"
   ),
   make_option(c("--outdir"),
               type = "character",
               help = "Path to output directory for merged files"
-  ),
-  make_option(c("-d", "--download"),
-              type = "logical",
-              help = "TRUE to download from cavatica", default = TRUE
-  ),
-  make_option(c("-u", "--username"),
-              type = "character",
-              help = "if download= TRUE mandatory;  cavatica username "
-  ),
-  make_option(c("-p", "--projectid"),
-              type = "character",
-              help = " if download= TRUE mandatory; cavatica project id"
   ),
   make_option(c("-m", "--mergefiles"),
               type = "logical",default=TRUE,
@@ -60,65 +44,23 @@ option_list <- list(
 
 # parse the parameters
 opt <- parse_args(OptionParser(option_list = option_list))
-topDir <- opt$inputdir
-manifest <- opt$manifest
-manifest_format <- opt$manifest_format
-outdir <- opt$outdir
-download <- opt$download
-username <- opt$username
-projectid <- opt$projectid
+
+input_arriba <- opt$input_arriba
+input_star_fusion <- opt$input_star_fusion
 old_arriba <- opt$old_arriba
 old_starfusion <- opt$old_starfusion
 outname_prefix <- opt$outname_prefix
 mergefiles <- opt$mergefiles
-
-# read manifest file
-if (manifest_format == "csv"){
-  manifest <- read.csv(manifest, stringsAsFactors = F)
-  manifest <- manifest %>%
-    dplyr::mutate(Kids_First_Biospecimen_ID = gsub("[.].*$","",manifest$name)) %>%
-    select(Kids_First_Biospecimen_ID, name, id) 
-} 
-
-
-if (manifest_format=="json" || manifest_format == "yaml"){
-  manifest <- rlist::list.load(manifest)
-  
-  manifest <- data.frame("Kids_First_Biospecimen_ID" = unlist(lapply(manifest$`rnaseq-analysis`,function(x) x$kf_biospecimen_id)),
-                         "name" = unlist(lapply(manifest$`rnaseq-analysis`,function(x) 
-                           gsub(".*[/]","",x$filepath))),
-                         "id" = unlist(lapply(manifest$`rnaseq-analysis`,function(x) x$cavatica_id)))
-  
-}
-
-manifest <- manifest[grep("arriba|starfusion.*tsv", manifest$name), ]
-
-# read histology file and split into polyA and stranded
-# clin <- read.delim(clin, stringsAsFactors = F)
-# polya <- clin %>%
-#   filter(experimental_strategy == "RNA-Seq" & RNA_library == "poly-A")
-# stranded <- clin %>%
-#   filter(experimental_strategy == "RNA-Seq" & RNA_library == "stranded")
-
-
-if (download) {
-  # download files from manifest
-  source("utils/download-files-manifest.R")
-  print(head(manifest))
-  download_files_manifest(
-    manifest = manifest, username =
-      username, projectid = projectid,
-    outputfolder = topDir
-  )
-}
+outdir <- opt$outdir
 
 if (mergefiles) {
   
   # read and merge arriba files
-  lfiles <- list.files(path = topDir, pattern = "*.arriba_formatted.annotated.tsv", recursive = TRUE)
+#  lfiles <- list.files(path = topDir, pattern = "*.arriba_formatted.annotated.tsv", recursive = TRUE)
+  lfiles <- input_arriba
   read.arriba <- function(x) {
     print(x)
-    dat <- read_tsv(file.path(topDir,x),col_types = readr::cols(breakpoint1 = readr::col_character(),breakpoint2 = readr::col_character())) %>%
+    dat <- read_tsv(x,col_types = readr::cols(breakpoint1 = readr::col_character(),breakpoint2 = readr::col_character())) %>%
       dplyr::rename( "annots"="[]",
                      "strand1.gene.fusion."="strand1(gene/fusion)",
                      "strand2.gene.fusion."="strand2(gene/fusion)") %>%
@@ -130,10 +72,11 @@ if (mergefiles) {
   new_arriba <- data.table::rbindlist(new_arriba)
   
   # read and merge starfusion files
-  lfiles <- list.files(path = topDir, pattern = "*.starfusion_formatted.tsv", recursive = TRUE)
+#  lfiles <- list.files(path = topDir, pattern = "*.starfusion_formatted.tsv", recursive = TRUE)
+  lfiles <- input_star_fusion
   read.starfusion <- function(x) {
     print(x)
-    dat <- read_tsv(file.path(topDir,x),col_types = 
+    dat <- read_tsv(x,col_types = 
                       readr::cols( JunctionReadCount = readr::col_character(),
                                    SpanningFragCount = readr::col_character(),
                                    FFPM = readr::col_character(),
