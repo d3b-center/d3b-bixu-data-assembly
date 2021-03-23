@@ -20,9 +20,9 @@ mkdir -p results
 ## Each directory with individual sample files.
 
 python3 scripts/merged_to_individual_files.py \
-    --manta /Users/zhangb1/Documents/Kid-First/project/Re-Harmonization/GH-PNOC008/merged_files/PNOC003-26-cell-line-PNOC008-29/PNOC003-26-cell-line.SV.gz \
-    --cnvkit /Users/zhangb1/Documents/Kid-First/project/Re-Harmonization/GH-PNOC008/merged_files/PNOC003-26-cell-line-PNOC008-29/PNOC003-26-cell-line.cnvkit.gz \
-    --freec /Users/zhangb1/Documents/Kid-First/project/Re-Harmonization/GH-PNOC008/merged_files/PNOC003-26-cell-line-PNOC008-29/PNOC003-26-cell-line.controlfreec.gz \
+    --manta *.SV.gz \
+    --cnvkit *.cnvkit.gz \
+    --freec *.controlfreec.gz \
     --snake $SCRATCHDIR/config_snakemake.yaml \
     --scratch $SCRATCHDIR \
     --uncalled results/uncalled_samples.tsv

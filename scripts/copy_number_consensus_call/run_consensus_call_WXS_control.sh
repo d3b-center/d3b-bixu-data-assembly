@@ -19,12 +19,9 @@ mkdir -p results
 ## Run the python script to go from 1 big manta file, cnvkit file and freec file into 3 directories. 
 ## Each directory with individual sample files.
 
-#    --cnvkit /Users/zhangb1/Documents/D3b-project/HGG-DMG-project/d3b-bix-analysis-toolkit/data/pnoc008/PNOC008-WXS-cnv-cnvkit.tsv.gz \
-#    --freec /Users/zhangb1/Documents/D3b-project/HGG-DMG-project/d3b-bix-analysis-toolkit/data/pnoc008/PNOC008-WXS-cnv-controlfreec.tsv.gz \
-
 python3 scripts/merged_to_individual_files.py \
-    --cnvkit /Users/zhangb1/Documents/Kid-First/project/Re-Harmonization/GH-PNOC008/merged_files/PNOC003-26-cell-line-PNOC008-29/PNOC008-29.cnvkit.gz \
-    --freec /Users/zhangb1/Documents/Kid-First/project/Re-Harmonization/GH-PNOC008/merged_files/PNOC003-26-cell-line-PNOC008-29/PNOC008-29.controlfreec.gz \
+    --cnvkit *.cnvkit.gz \
+    --freec *.controlfreec.gz \
     --snake $SCRATCHDIR/config_snakemake.yaml \
     --scratch $SCRATCHDIR \
     --uncalled results/uncalled_samples.tsv
