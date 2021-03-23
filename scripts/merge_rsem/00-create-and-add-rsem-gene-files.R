@@ -14,7 +14,7 @@ suppressPackageStartupMessages(library(stringr))
 option_list <- list(
   make_option(c("--input_rsem"),
     type = "character",
-    help = "Input  RSEM files"
+    help = "Input RSEM files"
   ),
   make_option(c("--outdir"),
     type = "character",
