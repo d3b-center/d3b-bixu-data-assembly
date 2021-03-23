@@ -5,10 +5,10 @@ sub usage {
         print STDERR << "USAGE";
 usage: perl $0 [options]
 options:
-        -P_value|P:         *p.value.txt file from control_freeC
-        -INFO|I:            *info.txt file from control_freeC
-		-biospecimens_id|bs:   Tumor Biospecimens ID
-        -help|h|?:          print help information
+        -P_value|P:            *p.value.txt file from control_freeC
+        -INFO|I:               *info.txt file from control_freeC
+        -biospecimens_id|bs:   Tumor Biospecimens ID
+        -help|h|?:             print help information
 
 e.g.:
         perl $0
