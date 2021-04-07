@@ -1,8 +1,4 @@
-# Author: Krutika Gaonkar
-# Merge step from Komal Rathi's code in OpenPBTA
-# Date: 05/10/2020
-# Function:
-# merges new RSEM files into previous version of rsem RDS object
+# merges new arriba and starfusion files into previous released version of merged tsv files
 
 # load libraries
 suppressPackageStartupMessages(library(optparse))
