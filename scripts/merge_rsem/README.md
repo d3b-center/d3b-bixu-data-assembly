@@ -2,7 +2,7 @@
 
 ### Description
 
-- The folder scripts are orginal written by @kgaonkar6 from here: https://github.com/d3b-center/ngs_assembly_rna/tree/main/analyses/merge_rsem
+- Modified from [here](https://github.com/d3b-center/ngs_assembly_rna/tree/main/analyses/merge_rsem) to use within cwl workflow
 
 - Made some changes in the inputs, read files directly , input BS ID and skip the download steps
 
