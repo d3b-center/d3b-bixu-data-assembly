@@ -3,7 +3,7 @@
 
 ### Description
 
-- The folder scripts are orginal written by @kgaonkar6 from here: https://github.com/d3b-center/ngs_assembly_rna/tree/main/analyses/merge_fusion
+- Modified from [here](https://github.com/d3b-center/ngs_assembly_rna/tree/main/analyses/merge_fusion) to use within cwl workflow
 
 - Made some changes in the inputs, read files directly and skip the download steps
 
