@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-MAINTAINER Bo Zhang (zhangb1@email.chop.edu)
+LABEL MAINTAINER="Bo Zhang (zhangb1@email.chop.edu)"
 
 RUN apt-get update -y && \
 apt-get install -y python3.6 python3-pip wget git bedtools pandoc && \
@@ -18,7 +18,7 @@ apt-get install -y r-base
 
 RUN ln -s /usr/bin/python3.6 /usr/bin/python
 
-#pip install fuctions
+#pip install fuctions for consensus CNV tools
 RUN pip3 install snakemake numpy pandas
 
 #install R packages
