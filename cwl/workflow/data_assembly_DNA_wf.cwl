@@ -26,11 +26,11 @@ inputs:
 
 
 outputs:
-  New_merged_maf: { type: File, outputSource: merge_maf/output_merged_maf}
+  new_merged_maf: { type: File, outputSource: merge_maf/output_merged_maf}
 
-  Formatted_cnvkit: { type: File, outputSource: format_cnvkit_cnv/output_formatted_cnvkit }
-  formatted_controlfreeC: { type: File, outputSource: format_controlfreeC_cnv/output_formatted_controlfreeC }
-  Formatted_SV: { type: File, outputSource: format_annoSV/output_formatted_annoSV }
+  formatted_cnvkit: { type: File, outputSource: format_cnvkit_cnv/output_formatted_cnvkit }
+  formatted_controlfreec: { type: File, outputSource: format_controlfreeC_cnv/output_formatted_controlfreeC }
+  formatted_sv: { type: File, outputSource: format_annoSV/output_formatted_annoSV }
 
 steps:
   gatekeeper:

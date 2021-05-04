@@ -23,12 +23,12 @@ inputs:
   biospecimens_id_RNA: string
 
 outputs:
-  New_merged_star_fusion: { type: File, outputSource: merge_fusion/output_merged_star_fusion }
-  New_merged_merged_arriba:  { type: File, outputSource: merge_fusion/output_merged_arriba }
+  new_merged_star_fusion: { type: File, outputSource: merge_fusion/output_merged_star_fusion }
+  new_merged_merged_arriba:  { type: File, outputSource: merge_fusion/output_merged_arriba }
   
-  New_merged_rsem_count: { type: File, outputSource: merge_rsem/output_merged_rsem_count }
-  New_merged_fpkm: { type: File, outputSource: merge_rsem/output_merged_fpkm }
-  New_merged_tpm: {type: File, outputSource: merge_rsem/output_merged_tpm}
+  new_merged_rsem_count: { type: File, outputSource: merge_rsem/output_merged_rsem_count }
+  new_merged_fpkm: { type: File, outputSource: merge_rsem/output_merged_fpkm }
+  new_merged_tpm: {type: File, outputSource: merge_rsem/output_merged_tpm}
 
 steps:
   format_fusion:
