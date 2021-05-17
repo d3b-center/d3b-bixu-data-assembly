@@ -20,7 +20,7 @@ inputs:
   old_rsem_tpm: { type: File }
   library:  {type: ['null', {type: enum, name: library, symbols: ["polya", "stranded"]}]}
 
-  biospecimens_id_RNA: string
+  biospecimen_id_RNA: string
 
 outputs:
   new_merged_star_fusion: { type: File, outputSource: merge_fusion/output_merged_star_fusion }
@@ -36,7 +36,7 @@ steps:
     in:
       arriba_output_file: arriba_output_file
       star_fusion_output_file: star_fusion_output_file
-      biospeimens_id: biospecimens_id_RNA
+      biospeimens_id: biospecimen_id_RNA
     out: [output_formatted_starfusion,output_formatted_arriba]
 
   anno_fusion:
@@ -44,7 +44,7 @@ steps:
     in:
       FusionGenome: FusionGenome
       output_formatted_arriba: format_fusion/output_formatted_arriba
-      biospeimens_id: biospecimens_id_RNA
+      biospeimens_id: biospecimen_id_RNA
     out: [output_formatted_annoted_arriba] 
 
   merge_fusion:
@@ -54,7 +54,7 @@ steps:
       input_star_fusion: format_fusion/output_formatted_starfusion
       old_arriba: old_arriba
       old_starfusion: old_starfusion
-      biospecimens_id_RNA: biospecimens_id_RNA
+      biospecimen_id_RNA: biospecimens_id_RNA
     out: [output_merged_arriba,output_merged_star_fusion]
 
   merge_rsem:
@@ -65,7 +65,7 @@ steps:
       old_rsem_fpkm: old_rsem_fpkm
       old_rsem_tpm: old_rsem_tpm
       library: library
-      biospecimens_id_RNA: biospecimens_id_RNA
+      biospecimen_id_RNA: biospecimens_id_RNA
     out: [output_merged_rsem_count,output_merged_fpkm,output_merged_tpm]
 
 $namespaces:

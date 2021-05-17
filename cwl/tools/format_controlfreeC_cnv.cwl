@@ -13,12 +13,12 @@ arguments:
   - position: 0
     shellQuote: false
     valueFrom: >-
-      -P_value $(inputs.input_controlfreeC_p_value.path) -INFO $(inputs.input_controlfreeC_info.path) -biospecimens_id $(inputs.biospecimens_id)|gzip >$(inputs.input_controlfreeC_info.nameroot).$(inputs.biospecimens_id).controlfreeC.gz
+      -P_value $(inputs.input_controlfreeC_p_value.path) -INFO $(inputs.input_controlfreeC_info.path) -biospecimen_id $(inputs.biospecimen_id)|gzip >$(inputs.input_controlfreeC_info.nameroot).$(inputs.biospecimen_id).controlfreeC.gz
 
 inputs:
   input_controlfreeC_p_value: File
   input_controlfreeC_info: File
-  biospecimens_id: string
+  biospecimen_id: string
 outputs:
   output_formatted_controlfreeC:
     type: File

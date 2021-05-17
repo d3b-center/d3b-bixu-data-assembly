@@ -13,13 +13,13 @@ arguments:
   - position: 0
     shellQuote: false
     valueFrom: >-
-      -sv $(inputs.input_annoSV.path) -participant_id $(inputs.participant_id) -biospecimen_id_normal $(inputs.biospeimens_id_normal) -biospecimen_id_tumor $(inputs.biospeimens_id_tumor) |gzip >$(inputs.input_annoSV.nameroot).$(inputs.biospeimens_id_tumor).gz
+      -sv $(inputs.input_annoSV.path) -participant_id $(inputs.participant_id) -biospecimen_id_normal $(inputs.biospecimen_id_normal) -biospecimen_id_tumor $(inputs.biospecimen_id_tumor) |gzip >$(inputs.input_annoSV.nameroot).$(inputs.biospecimen_id_tumor).gz
 
 inputs:
   input_annoSV: File
   participant_id: string
-  biospeimens_id_tumor: string
-  biospeimens_id_normal: string
+  biospecimen_id_tumor: string
+  biospecimen_id_normal: string
   conditional_run: { type: int, doc: "Placeholder variable to allow conditional running" } 
 
 outputs:

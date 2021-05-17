@@ -13,12 +13,12 @@ arguments:
   - position: 0
     shellQuote: false
     valueFrom: >-
-      -call_cns $(inputs.input_cnvkit_call_cns.path) -call_seg $(inputs.input_cnvkit_call_seg.path) |gzip >$(inputs.input_cnvkit_call_seg.nameroot).$(inputs.biospecimens_id).cnvkit.gz
+      -call_cns $(inputs.input_cnvkit_call_cns.path) -call_seg $(inputs.input_cnvkit_call_seg.path) |gzip >$(inputs.input_cnvkit_call_seg.nameroot).$(inputs.biospecimen_id).cnvkit.gz
 
 inputs:
   input_cnvkit_call_cns: File
   input_cnvkit_call_seg: File
-  biospecimens_id: string
+  biospecimen_id: string
 outputs:
   output_formatted_cnvkit:
     type: File

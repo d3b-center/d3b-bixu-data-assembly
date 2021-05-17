@@ -17,7 +17,7 @@ arguments:
 inputs:
   FusionGenome: File
   output_formatted_arriba: File
-  biospeimens_id: string
+  biospeimen_id: string
 outputs:
   output_formatted_annoted_arriba:
     type: File

@@ -4,6 +4,7 @@ id: data_assembly_DNA_wf
 requirements:
   - class: MultipleInputFeatureRequirement
   - class: SubworkflowFeatureRequirement
+  - class: ScatterFeatureRequirement
 inputs:
   # maf
   input_maf: { type: File }
@@ -19,8 +20,8 @@ inputs:
 
 
   participant_id: string
-  biospeimens_id_tumor: string
-  biospeimens_id_normal: string
+  biospecimen_id_tumor: string
+  biospecimen_id_normal: string
 
   run_WGS: { type: boolean, doc: "require run WGS with SV" }
 
@@ -44,7 +45,7 @@ steps:
     in:
       input_maf: input_maf
       input_previous_merged_maf: input_previous_merged_maf
-      biospecimens_id: biospeimens_id_tumor
+      biospecimen_id: biospecimen_id_tumor
 
     out: [output_merged_maf]
   
@@ -61,8 +62,8 @@ steps:
     in:
       input_annoSV: annoSV/output_formatted_SV
       participant_id: participant_id
-      biospeimens_id_tumor: biospeimens_id_tumor
-      biospeimens_id_normal: biospeimens_id_normal
+      biospecimen_id_tumor: biospecimen_id_tumor
+      biospecimen_id_normal: biospecimen_id_normal
       conditional_run: gatekeeper/scatter_WGS
     scatter: conditional_run
     out: [output_formatted_annoSV]
@@ -72,7 +73,7 @@ steps:
     in:
       input_cnvkit_call_cns: input_cnvkit_call_cns
       input_cnvkit_call_seg: input_cnvkit_call_seg
-      biospecimens_id: biospeimens_id_tumor
+      biospecimen_id: biospecimen_id_tumor
     out: [output_formatted_cnvkit]
 
   format_controlfreeC_cnv:
@@ -80,7 +81,7 @@ steps:
     in:
       input_controlfreeC_p_value: input_controlfreeC_p_value
       input_controlfreeC_info: input_controlfreeC_info
-      biospecimens_id: biospeimens_id_tumor
+      biospecimen_id: biospecimen_id_tumor
     out: [output_formatted_controlfreeC]
 
 $namespaces:
