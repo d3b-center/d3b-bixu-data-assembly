@@ -13,13 +13,13 @@ arguments:
   - position: 0
     shellQuote: false
     valueFrom: >-
-      --input_arriba $(inputs.input_arriba.path) --input_star_fusion $(inputs.input_star_fusion.path) --outdir ./ --mergefiles TRUE --old_arriba $(inputs.old_arriba.path) --old_starfusion $(inputs.old_starfusion.path) --outname_prefix pbta-$(inputs.biospecimens_id_RNA)
+      --input_arriba $(inputs.input_arriba.path) --input_star_fusion $(inputs.input_star_fusion.path) --outdir ./ --mergefiles TRUE --old_arriba $(inputs.old_arriba.path) --old_starfusion $(inputs.old_starfusion.path) --outname_prefix pbta-$(inputs.biospecimen_id_RNA)
 inputs:
   input_arriba: File
   input_star_fusion: File
   old_arriba: File
   old_starfusion: File
-  biospecimens_id_RNA: string
+  biospecimen_id_RNA: string
 outputs:
   output_merged_arriba:
     type: File

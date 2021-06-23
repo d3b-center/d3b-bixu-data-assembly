@@ -36,7 +36,7 @@ steps:
     in:
       arriba_output_file: arriba_output_file
       star_fusion_output_file: star_fusion_output_file
-      biospceimens_id: biospecimen_id_RNA
+      biospecimen_id: biospecimen_id_RNA
     out: [output_formatted_starfusion,output_formatted_arriba]
 
   anno_fusion:
@@ -44,7 +44,7 @@ steps:
     in:
       FusionGenome: FusionGenome
       output_formatted_arriba: format_fusion/output_formatted_arriba
-      biospceimens_id: biospecimen_id_RNA
+      biospecimen_id: biospecimen_id_RNA
     out: [output_formatted_annoted_arriba] 
 
   merge_fusion:
@@ -54,7 +54,7 @@ steps:
       input_star_fusion: format_fusion/output_formatted_starfusion
       old_arriba: old_arriba
       old_starfusion: old_starfusion
-      biospecimen_id_RNA: biospecimens_id_RNA
+      biospecimen_id_RNA: biospecimen_id_RNA
     out: [output_merged_arriba,output_merged_star_fusion]
 
   merge_rsem:
