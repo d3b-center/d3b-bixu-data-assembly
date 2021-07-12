@@ -16,7 +16,7 @@ arguments:
       -sv $(inputs.input_annoSV.path) -participant_id $(inputs.participant_id) -biospecimen_id_normal $(inputs.biospecimen_id_normal) -biospecimen_id_tumor $(inputs.biospecimen_id_tumor) |gzip >$(inputs.input_annoSV.nameroot).$(inputs.biospecimen_id_tumor).gz
 
 inputs:
-  input_annoSV: File
+  input_annoSV: File[]
   participant_id: string
   biospecimen_id_tumor: string
   biospecimen_id_normal: string

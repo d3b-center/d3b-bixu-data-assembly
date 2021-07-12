@@ -44,7 +44,7 @@ steps:
     in:
       FusionGenome: FusionGenome
       output_formatted_arriba: format_fusion/output_formatted_arriba
-      biospecimen_id: biospecimen_id_RNA
+      biospecimens_id: biospecimen_id_RNA
     out: [output_formatted_annoted_arriba] 
 
   merge_fusion:
@@ -65,7 +65,7 @@ steps:
       old_rsem_fpkm: old_rsem_fpkm
       old_rsem_tpm: old_rsem_tpm
       library: library
-      biospecimen_id_RNA: biospecimens_id_RNA
+      biospecimen_id_RNA: biospecimen_id_RNA
     out: [output_merged_rsem_count,output_merged_fpkm,output_merged_tpm]
 
 $namespaces:

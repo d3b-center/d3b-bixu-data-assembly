@@ -31,7 +31,7 @@ outputs:
 
   formatted_cnvkit: { type: File, outputSource: format_cnvkit_cnv/output_formatted_cnvkit }
   formatted_controlfreec: { type: File, outputSource: format_controlfreeC_cnv/output_formatted_controlfreeC }
-  formatted_sv: { type: File, outputSource: format_annoSV/output_formatted_annoSV }
+  formatted_sv: { type: 'File[]', outputSource: format_annoSV/output_formatted_annoSV }
 
 steps:
   gatekeeper:
