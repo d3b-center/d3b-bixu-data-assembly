@@ -31,7 +31,7 @@ outputs:
 
   formatted_cnvkit: { type: File, outputSource: format_cnvkit_cnv/output_formatted_cnvkit }
   formatted_controlfreec: { type: File, outputSource: format_controlfreeC_cnv/output_formatted_controlfreeC }
-  formatted_sv: { type: 'File[]', outputSource: format_annoSV/output_formatted_annoSV }
+  formatted_sv: { type: File, outputSource: format_annoSV/output_formatted_annoSV }
 
 steps:
   gatekeeper:
@@ -54,7 +54,7 @@ steps:
     in:
       input_SV: input_SV
       conditional_run: gatekeeper/scatter_WGS
-    scatter: conditional_run
+  #  scatter: conditional_run
     out: [output_formatted_SV]
 
   format_annoSV:
@@ -65,7 +65,7 @@ steps:
       biospecimen_id_tumor: biospecimen_id_tumor
       biospecimen_id_normal: biospecimen_id_normal
       conditional_run: gatekeeper/scatter_WGS
-    scatter: conditional_run
+#    scatter: conditional_run
     out: [output_formatted_annoSV]
 
   format_cnvkit_cnv:
