@@ -13,7 +13,7 @@ arguments:
   - position: 0
     shellQuote: false
     valueFrom: >-
-      --input_rsem $(inputs.input_rsem.path) --outdir ./ --mergefiles TRUE --old_rsem_count $(inputs.old_rsem_count.path) --old_rsem_fpkm $(inputs.old_rsem_fpkm.path) --old_rsem_tpm $(inputs.old_rsem_tpm.path) --outname_prefix pbta-$(inputs.biospecimen_id_RNA) --library $(inputs.library) --biospecimen_id $(inputs.biospecimen_id_RNA)
+      --input_rsem $(inputs.input_rsem.path) --outdir ./ --mergefiles TRUE --old_rsem_count $(inputs.old_rsem_count.path) --old_rsem_fpkm $(inputs.old_rsem_fpkm.path) --old_rsem_tpm $(inputs.old_rsem_tpm.path) --outname_prefix pbta-$(inputs.biospecimen_id_RNA) --library $(inputs.library) --biospecimens_id $(inputs.biospecimen_id_RNA)
 
 inputs:
   input_rsem: File
