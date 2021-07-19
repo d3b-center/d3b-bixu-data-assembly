@@ -1,6 +1,6 @@
 class: CommandLineTool
 cwlVersion: v1.0
-id: copy_number_consensus_call
+id: copy_number_consensus_call_WGS
 requirements:
   - class: ShellCommandRequirement
   - class: ResourceRequirement
