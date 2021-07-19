@@ -24,6 +24,8 @@ inputs:
   biospecimen_id_normal: string
 
   run_WGS: { type: boolean, doc: "require run WGS with SV" }
+  
+  run_WGS_or_WXS: string
 
 
 outputs:
@@ -84,11 +86,14 @@ steps:
       biospecimen_id: biospecimen_id_tumor
     out: [output_formatted_controlfreeC]
   
-  copy_number_consensus_call_WXS:
-    run: ../tools/copy_number_consensus_call_WXS.cwl
+  copy_number_consensus_call:
+    run: ../tools/copy_number_consensus_call.cwl
     in:
-      input_formatted_cnvkit:
-      input_formatted_controlfreeC: 
+      input_formatted_cnvkit: format_cnvkit_cnv/output_formatted_cnvkit
+      input_formatted_controlfreeC: format_controlfreeC_cnv/output_formatted_controlfreeC
+      input_formatted_mantaSV: format_annoSV/output_formatted_annoSV
+      run_WGS_or_WXS: run_WGS_or_WXS
+
     out: [output_consensus_seg]
 
 $namespaces:
