@@ -83,6 +83,13 @@ steps:
       input_controlfreeC_info: input_controlfreeC_info
       biospecimen_id: biospecimen_id_tumor
     out: [output_formatted_controlfreeC]
+  
+  copy_number_consensus_call_WXS:
+    run: ../tools/copy_number_consensus_call_WXS.cwl
+    in:
+      input_formatted_cnvkit:
+      input_formatted_controlfreeC: 
+    out: [output_consensus_seg]
 
 $namespaces:
   sbg: https://sevenbridges.com
