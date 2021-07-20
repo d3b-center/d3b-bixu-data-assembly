@@ -17,7 +17,10 @@ inputs:
   input_cnvkit_call_seg: { type: File }
   input_controlfreeC_p_value: { type: File}
   input_controlfreeC_info: { type: File }
-
+  input_previous_merged_seg: {type: File}
+  histology_file: {type: File}
+  gtf_file: {type: File}
+  gtf_annote_db: {type: File}
 
   participant_id: string
   biospecimen_id_tumor: string
@@ -34,6 +37,9 @@ outputs:
   formatted_cnvkit: { type: File, outputSource: format_cnvkit_cnv/output_formatted_cnvkit }
   formatted_controlfreec: { type: File, outputSource: format_controlfreeC_cnv/output_formatted_controlfreeC }
   formatted_sv: { type: File, outputSource: format_annoSV/output_formatted_annoSV }
+
+  consensus_seg_annotated_cn: {type: File, outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn}
+  consensus_seg_annotated_cn_x_and_y: {type: File, outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn_x_and_y}
 
 steps:
   gatekeeper:
@@ -93,8 +99,25 @@ steps:
       input_formatted_controlfreeC: format_controlfreeC_cnv/output_formatted_controlfreeC
       input_formatted_mantaSV: format_annoSV/output_formatted_annoSV
       run_WGS_or_WXS: run_WGS_or_WXS
-
     out: [output_consensus_seg]
+
+  merge_seg:
+    run: ../tools/merge_seg.cwl
+    in:
+      input_seg: copy_number_consensus_call/output_consensus_seg
+      input_previous_merged_seg: input_previous_merged_seg
+      biospecimen_id: biospecimen_id_tumor
+    out: [output_merged_seg]
+  
+  focal-cn-file-preparation:
+    run: ../tools/focal-cn-file-preparation.cwl
+    in:
+      consensus_seg_file: merge_seg/output_merged_seg
+      histology_file: histology_file
+      gtf_file: gtf_file
+      gtf_annote_db: gtf_annote_db
+      biospecimen_id: biospecimen_id_tumor
+    out: [consensus_seg_annotated_cn,consensus_seg_annotated_cn_x_and_y]
 
 $namespaces:
   sbg: https://sevenbridges.com

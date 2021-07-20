@@ -17,13 +17,14 @@ arguments:
         Rscript /d3b-bixu-data-assembly/scripts/focal-cn-file-preparation/03-add-cytoband-status-consensus.R  --scratch ./scratch && 
         snakemake -j 10 --snakefile /d3b-bixu-data-assembly/scripts/focal-cn-file-preparation/run-bedtools.snakemake && 
         Rscript /d3b-bixu-data-assembly/scripts/focal-cn-file-preparation/04-prepare-cn-file.R  --cnv_file ./scratch/consensus_seg_with_status.tsv --gtf_file $(inputs.gtf_anno_file.path) --metadata $(inputs.histology_file.path)  --filename_lead "consensus_seg_annotated_cn" --seg --root_dir ./ --annotation_file $(inputs.gtf_annote_db.path) &&
-        cp ./results/consensus_seg_annotated_cn_autosomes.tsv.gz . && cp ./results/consensus_seg_annotated_cn_x_and_y.tsv.gz .
+        cp ./results/consensus_seg_annotated_cn_autosomes.tsv.gz ./$(inputs.biospecimen_id)_consensus_seg_annotated_cn_autosomes.tsv.gz && cp ./results/consensus_seg_annotated_cn_x_and_y.tsv.gz ./$(inputs.biospecimen_id)_consensus_seg_annotated_cn_x_and_y.tsv.gz
 
 inputs:
   consensus_seg_file: File
   histology_file: File
   gtf_file: File
   gtf_annote_db: File
+  biospecimen_id: string
 
 outputs:
   consensus_seg_annotated_cn:

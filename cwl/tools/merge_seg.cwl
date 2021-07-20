@@ -18,7 +18,7 @@ arguments:
 inputs:
   input_seg: File
   input_previous_merged_seg: File
-  biospecimen_id: File
+  biospecimen_id: string
 outputs:
   output_merged_seg:
     type: File
