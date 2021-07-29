@@ -80,13 +80,13 @@ rule cnvkit_filter:
 rule generate_excluded:
     # Combine the sets of regions that are not well called by CNV algorithms for exclusion
     input:
-        "ref/telomeres.bed",
-        "ref/centromeres.bed",
-        "ref/heterochromatin.bed",
-        "ref/immunoglobulin_regions.bed",
-        "ref/segmental_dups.bed"
+        "/d3b-bixu-data-assembly/scripts/copy_number_consensus_call/ref/telomeres.bed",
+        "/d3b-bixu-data-assembly/scripts/copy_number_consensus_call/ref/centromeres.bed",
+        "/d3b-bixu-data-assembly/scripts/copy_number_consensus_call/ref/heterochromatin.bed",
+        "/d3b-bixu-data-assembly/scripts/copy_number_consensus_call/ref/immunoglobulin_regions.bed",
+        "/d3b-bixu-data-assembly/scripts/copy_number_consensus_call/ref/segmental_dups.bed"
     output:
-        "ref/cnv_excluded_regions.bed"
+        "/d3b-bixu-data-assembly/scripts/copy_number_consensus_call/ref/cnv_excluded_regions.bed"
     shell:
         "cat {input} | cut -f 1-3 | sort -k1,1 -k2,2n | bedtools merge > {output}"
 
@@ -94,10 +94,10 @@ rule generate_callable:
     # Invert the excluded regions to generate a file of regions potentially called.
     # First filters out small regions <200Kb
     input:
-        bed="ref/cnv_excluded_regions.bed",
-        genome="ref/hg38.chrom.sizes"
+        bed="/d3b-bixu-data-assembly/scripts/copy_number_consensus_call/ref/cnv_excluded_regions.bed",
+        genome="/d3b-bixu-data-assembly/scripts/copy_number_consensus_call/ref/hg38.chrom.sizes"
     output:
-        "ref/cnv_callable.bed"
+        "/d3b-bixu-data-assembly/scripts/copy_number_consensus_call/ref/cnv_callable.bed"
     params:
         min_size = 200000
     shell:
@@ -111,7 +111,7 @@ rule generate_callable:
 rule filter_excluded:
     input:
         ## Define the location of the input file and take the path/extension from the config file
-        exclude_list="ref/cnv_excluded_regions.bed",
+        exclude_list="/d3b-bixu-data-assembly/scripts/copy_number_consensus_call/ref/cnv_excluded_regions.bed",
         bedfile= scratch_loc + "interim/{sample}.{caller}.{dupdel}.bed"
     output:
         ## Define the output files' names
@@ -246,7 +246,7 @@ rule neutral_regions:
     input:
         dup_merge =  scratch_loc + "endpoints/{sample}.dup.merged.final.bed",
         del_merge =  scratch_loc + "endpoints/{sample}.del.merged.final.bed",
-        called = "ref/cnv_callable.bed"
+        called = "/d3b-bixu-data-assembly/scripts/copy_number_consensus_call/ref/cnv_callable.bed"
     output:
          scratch_loc + "endpoints/{sample}.neutral.bed"
     shell:
