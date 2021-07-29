@@ -33,4 +33,4 @@ outputs:
   output_consensus_seg:
     type: File
     outputBinding:
-      glob: '*.consensus.seg.gz'
+      glob: '*consensus.seg.gz'
