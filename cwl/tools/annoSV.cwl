@@ -16,7 +16,7 @@ arguments:
       ANNOTSV=/opt/AnnotSV_2.1 && $ANNOTSV/bin/AnnotSV -bedtools /usr/local/bin/bedtools -genomeBuild GRCh38 -promoterSize 2000 -SVminSize 200 -SVinputFile $(inputs.input_SV.path) -outputDir ./
 
 inputs:
-  input_SV: File
+  input_SV: File?
   conditional_run: { type: int, doc: "Placeholder variable to allow conditional running" } 
 
 outputs:

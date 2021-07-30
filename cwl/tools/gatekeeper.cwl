@@ -13,7 +13,7 @@ inputs:
   run_WGS: boolean
 outputs:
   scatter_WGS:
-    type: int
+    type: int[]
     outputBinding:
       outputEval:
         ${
