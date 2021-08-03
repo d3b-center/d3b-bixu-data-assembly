@@ -17,12 +17,12 @@ arguments:
       python /d3b-bixu-data-assembly/scripts/copy_number_consensus_call/scripts/merged_to_individual_files.py 
       --cnvkit $(inputs.input_formatted_cnvkit.path)
       --freec $(inputs.input_formatted_controlfreeC.path)
-      --snake  ./scratch/config_snakemake.yaml 
-      --scratch ./scratch 
+      --snake  /scratch/config_snakemake.yaml 
+      --scratch /scratch 
       --uncalled ./results/uncalled_samples.tsv
       $(inputs.run_WGS_or_WXS == 'WGS' ? '--manta ' + inputs.input_formatted_mantaSV.path : '')
       && snakemake -s /d3b-bixu-data-assembly/scripts/copy_number_consensus_call/$(inputs.run_WGS_or_WXS == 'WGS' ? 'Snakefile' : 'Snakefile_WXS') 
-      --configfile ./scratch/config_snakemake.yaml 
+      --configfile /scratch/config_snakemake.yaml 
       -j 
       --restart-times 2 
       && cp ./results/data-cnv-consensus.seg.gz .;
