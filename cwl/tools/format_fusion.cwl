@@ -4,7 +4,6 @@ id: format_fusion
 requirements:
   - class: ShellCommandRequirement
   - class: ResourceRequirement
-    ramMin: 1000
   - class: DockerRequirement
     dockerPull: 'kfdrc/annofuse:0.1.8'
   - class: InlineJavascriptRequirement

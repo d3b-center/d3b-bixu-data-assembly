@@ -4,7 +4,6 @@ id: anno_fusion
 requirements:
   - class: ShellCommandRequirement
   - class: ResourceRequirement
-    ramMin: 1000
   - class: DockerRequirement
     dockerPull: 'gaonkark/fusionanno:latest'
   - class: InlineJavascriptRequirement

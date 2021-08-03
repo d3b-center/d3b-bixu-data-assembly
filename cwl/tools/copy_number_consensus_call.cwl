@@ -15,12 +15,12 @@ arguments:
       -p scratch &&
       mkdir results &&
       python /d3b-bixu-data-assembly/scripts/copy_number_consensus_call/scripts/merged_to_individual_files.py 
-      --cnvkit inputs.input_formatted_cnvkit.path
-      --freec inputs.input_formatted_controlfreeC.path
+      --cnvkit $(inputs.input_formatted_cnvkit.path)
+      --freec $(inputs.input_formatted_controlfreeC.path)
       --snake  ./scratch/config_snakemake.yaml 
       --scratch ./scratch 
       --uncalled ./results/uncalled_samples.tsv
-      $(inputs.run_WGS_or_WXS == 'WGS' ? '--manta ' + inputs.input_formatted_mantaSV[0].path : '')
+      $(inputs.run_WGS_or_WXS == 'WGS' ? '--manta ' + inputs.input_formatted_mantaSV.path : '')
       && snakemake -s /d3b-bixu-data-assembly/scripts/copy_number_consensus_call/$(inputs.run_WGS_or_WXS == 'WGS' ? 'Snakefile' : 'Snakefile_WXS') 
       --configfile ./scratch/config_snakemake.yaml 
       -j 
@@ -30,7 +30,7 @@ arguments:
 inputs:
   input_formatted_cnvkit: File
   input_formatted_controlfreeC: File
-  input_formatted_mantaSV: File[]?
+  input_formatted_mantaSV: File?
   run_WGS_or_WXS: { type: { type: 'enum', name: run_WGS_or_WXS, symbols: ["WGS", "WXS"] } }
 
 outputs:

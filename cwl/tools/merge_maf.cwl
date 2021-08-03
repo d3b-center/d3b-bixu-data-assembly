@@ -4,9 +4,9 @@ id: merge_maf
 requirements:
   - class: ShellCommandRequirement
   - class: ResourceRequirement
-    ramMin: 1000
-  - class: DockerRequirement
   - class: InlineJavascriptRequirement
+  - class: DockerRequirement
+    dockerPull: 'zhangb1/data-assembly'
 baseCommand: ["/bin/bash -c"]
 arguments:
   - position: 0

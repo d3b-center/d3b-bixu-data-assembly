@@ -4,7 +4,6 @@ id: annoSV
 requirements:
   - class: ShellCommandRequirement
   - class: ResourceRequirement
-    ramMin: 1000
   - class: DockerRequirement
     dockerPull: 'gaonkark/annotsv:latest'
   - class: InlineJavascriptRequirement
@@ -17,8 +16,8 @@ arguments:
 
 inputs:
   input_SV: File?
-  conditional_run: { type: int, doc: "Placeholder variable to allow conditional running" } 
-
+#  conditional_run: { type: int, doc: "Placeholder variable to allow conditional running" } 
+  run_WGS_or_WXS: { type: { type: 'enum', name: run_WGS_or_WXS, symbols: ["WGS", "WXS"] } }  
 outputs:
   output_formatted_SV:
     type: File
