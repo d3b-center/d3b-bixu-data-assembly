@@ -21,6 +21,8 @@ inputs:
   histology_file: {type: "File"}
   gtf_file: {type: "File"}
   gtf_annote_db: {type: "File"}
+  input_previous_merged_cnvkit: {type: "File"}
+  input_previous_merged_controlfreec: {type: "File"}
 
   participant_id: "string"
   biospecimen_id_tumor: "string"
@@ -34,9 +36,12 @@ inputs:
 outputs:
   new_merged_maf: { type: "File", outputSource: merge_maf/output_merged_maf}
 
-  formatted_cnvkit: { type: "File", outputSource: format_cnvkit_cnv/output_formatted_cnvkit }
-  formatted_controlfreec: { type: "File", outputSource: format_controlfreeC_cnv/output_formatted_controlfreeC }
+ # formatted_cnvkit: { type: "File", outputSource: format_cnvkit_cnv/output_formatted_cnvkit }
+ # formatted_controlfreec: { type: "File", outputSource: format_controlfreeC_cnv/output_formatted_controlfreeC }
   formatted_sv: { type: "File?", outputSource: format_annoSV/output_formatted_annoSV }
+  
+  new_merged_cnvkit: { type: "File", outputSource: merge_cnvkit/output_merged_cnvkit}
+  new_merged_controlfreec: { type: "File", outputSource: merge_controlfreec/output_merged_controlfreec}
 
   consensus_seg_annotated_cn: {type: "File", outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn}
   consensus_seg_annotated_cn_x_and_y: {type: "File", outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn_x_and_y}
@@ -78,6 +83,14 @@ steps:
       biospecimen_id: biospecimen_id_tumor
     out: [output_formatted_cnvkit]
 
+  merge_cnvkit:
+    run: ../tools/merge_cnvkit.cwl
+    in:
+      input_cnvkit: format_cnvkit_cnv/output_formatted_cnvkit
+      input_previous_merged_cnvkit: input_previous_merged_cnvkit
+      biospecimen_id: biospecimen_id_tumor
+    out: [output_merged_cnvkit]
+
   format_controlfreeC_cnv:
     run: ../tools/format_controlfreeC_cnv.cwl
     in:
@@ -86,6 +99,14 @@ steps:
       biospecimen_id: biospecimen_id_tumor
     out: [output_formatted_controlfreeC]
   
+  merge_controlfreec:
+    run: ../tools/merge_controlfreeC.cwl
+    in:
+      input_controlfreec: format_controlfreeC_cnv/output_formatted_controlfreeC
+      input_previous_merged_controlfreec: input_previous_merged_controlfreec
+      biospecimen_id: biospecimen_id_tumor
+    out: [output_merged_controlfreec]
+
   copy_number_consensus_call:
     run: ../tools/copy_number_consensus_call.cwl
     in:

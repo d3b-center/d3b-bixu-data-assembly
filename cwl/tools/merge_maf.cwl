@@ -14,7 +14,7 @@ arguments:
     valueFrom: >-
       set -eo pipefail
 
-      egrep -v "#version|Hugo_Symbol" $(inputs.input_maf.path) |gzip >temp.gz && cat $(inputs.input_previous_merged_maf.path) temp.gz > $(inputs.input_previous_merged_maf.nameroot).$(inputs.biospecimen_id).gz && rm temp.gz
+      egrep -v "#version|Hugo_Symbol" $(inputs.input_maf.path) |gzip >temp.gz && cat $(inputs.input_previous_merged_maf.path) temp.gz > pbta-merged-chop-method-consensus_somatic.$(inputs.biospecimen_id).maf.gz && rm temp.gz
 inputs:
   input_maf: File
   input_previous_merged_maf: File
