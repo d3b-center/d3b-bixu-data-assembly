@@ -1,5 +1,7 @@
 # Copy Number Consensus Call
 
+*Note:This README is from OpenPBTA method git repo*
+
 ## Overview
 
 The PBTA data set contains CNVs called from different callers, ie. Manta, CNVkit, and Freec. 
