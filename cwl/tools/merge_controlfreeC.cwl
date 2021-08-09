@@ -3,7 +3,6 @@ cwlVersion: v1.0
 id: merge_controlfreec
 requirements:
   - class: ShellCommandRequirement
-  - class: ResourceRequirement
   - class: InlineJavascriptRequirement
   - class: DockerRequirement
     dockerPull: 'zhangb1/data-assembly'

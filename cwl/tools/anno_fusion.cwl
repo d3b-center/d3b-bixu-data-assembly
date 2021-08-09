@@ -3,7 +3,6 @@ cwlVersion: v1.0
 id: anno_fusion
 requirements:
   - class: ShellCommandRequirement
-  - class: ResourceRequirement
   - class: DockerRequirement
     dockerPull: 'gaonkark/fusionanno:latest'
   - class: InlineJavascriptRequirement

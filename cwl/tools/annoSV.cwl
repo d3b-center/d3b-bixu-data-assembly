@@ -3,7 +3,6 @@ cwlVersion: v1.0
 id: annoSV
 requirements:
   - class: ShellCommandRequirement
-  - class: ResourceRequirement
   - class: DockerRequirement
     dockerPull: 'gaonkark/annotsv:latest'
   - class: InlineJavascriptRequirement
