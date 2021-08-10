@@ -11,22 +11,25 @@
 │   ├── annoSV.cwl
 │   ├── anno_fusion.cwl
 │   ├── copy_number_consensus_call.cwl
+│   ├── focal-cn-file-preparation.cwl
 │   ├── format_annoSV.cwl
 │   ├── format_cnvkit_cnv.cwl
 │   ├── format_controlfreeC_cnv.cwl
 │   ├── format_fusion.cwl
-│   ├── gatekeeper.cwl
+│   ├── merge_cnvkit.cwl
+│   ├── merge_controlfreeC.cwl
 │   ├── merge_fusion.cwl
 │   ├── merge_maf.cwl
-│   └── merge_rsem.cwl
+│   ├── merge_rsem.cwl
+│   └── merge_seg.cwl
 └── workflow
-    ├── data_assembly_DNA_wf.cwl
+    ├── data_assembly_DNA_1.2_wf.cwl
     └── data_assembly_RNA_wf.cwl
 ```
 
 ## Workflow and Inputs 
 
-### data\_assembly\_DNA\_wf.cwl
+### data\_assembly\_DNA\_1.2\_wf.cwl
 
 - This workflow will 
 

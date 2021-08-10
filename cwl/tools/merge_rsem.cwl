@@ -3,8 +3,6 @@ cwlVersion: v1.0
 id: merge_rsem
 requirements:
   - class: ShellCommandRequirement
-  - class: ResourceRequirement
-    ramMin: 1000
   - class: DockerRequirement
     dockerPull: 'zhangb1/data-assembly'
   - class: InlineJavascriptRequirement

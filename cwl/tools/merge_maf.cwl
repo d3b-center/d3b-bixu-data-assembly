@@ -3,10 +3,9 @@ cwlVersion: v1.0
 id: merge_maf
 requirements:
   - class: ShellCommandRequirement
-  - class: ResourceRequirement
-    ramMin: 1000
-  - class: DockerRequirement
   - class: InlineJavascriptRequirement
+  - class: DockerRequirement
+    dockerPull: 'zhangb1/data-assembly'
 baseCommand: ["/bin/bash -c"]
 arguments:
   - position: 0
@@ -14,7 +13,7 @@ arguments:
     valueFrom: >-
       set -eo pipefail
 
-      egrep -v "#version|Hugo_Symbol" $(inputs.input_maf.path) |gzip >temp.gz && cat $(inputs.input_previous_merged_maf.path) temp.gz > $(inputs.input_previous_merged_maf.nameroot).$(inputs.biospecimen_id).gz && rm temp.gz
+      egrep -v "#version|Hugo_Symbol" $(inputs.input_maf.path) |gzip >temp.gz && cat $(inputs.input_previous_merged_maf.path) temp.gz > pbta-merged-chop-method-consensus_somatic.$(inputs.biospecimen_id).maf.gz && rm temp.gz
 inputs:
   input_maf: File
   input_previous_merged_maf: File

@@ -3,8 +3,6 @@ cwlVersion: v1.0
 id: format_controlfreeC_cnv
 requirements:
   - class: ShellCommandRequirement
-  - class: ResourceRequirement
-    ramMin: 1000
   - class: DockerRequirement
     dockerPull: 'zhangb1/data-assembly'
   - class: InlineJavascriptRequirement
