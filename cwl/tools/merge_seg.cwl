@@ -13,7 +13,7 @@ arguments:
     valueFrom: >-
       set -eo pipefail
 
-      egrep -v "loc.start" $(inputs.input_seg.path) |gzip >temp.gz && cat $(inputs.input_previous_merged_seg.path) temp.gz > $(inputs.input_previous_merged_seg.nameroot).$(inputs.biospecimen_id).gz && rm temp.gz
+      egrep -v "loc.start" $(inputs.input_seg.path) |gzip >temp.gz && cat $(inputs.input_previous_merged_seg.path) temp.gz > pbta-cnv-consensus.$(inputs.biospecimen_id).seg.gz && rm temp.gz
 inputs:
   input_seg: File
   input_previous_merged_seg: File

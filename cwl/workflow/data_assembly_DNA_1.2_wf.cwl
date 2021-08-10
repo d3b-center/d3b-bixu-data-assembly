@@ -42,6 +42,7 @@ outputs:
   
   new_merged_cnvkit: { type: "File", outputSource: merge_cnvkit/output_merged_cnvkit}
   new_merged_controlfreec: { type: "File", outputSource: merge_controlfreec/output_merged_controlfreec}
+  new_merged_consensus_seg: { type: "File", outputSource: merge_seg/output_merged_seg}
 
   consensus_seg_annotated_cn: {type: "File", outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn}
   consensus_seg_annotated_cn_x_and_y: {type: "File", outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn_x_and_y}
