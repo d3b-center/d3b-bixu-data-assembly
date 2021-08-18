@@ -117,6 +117,7 @@ steps:
       input_sv: format_annoSV/output_formatted_annoSV
       input_previous_merged_sv: input_previous_merged_sv
       biospecimen_id: biospecimen_id_tumor
+      run_WGS_or_WXS: run_WGS_or_WXS
     when: $(inputs.run_WGS_or_WXS == "WGS")
     out: [output_merged_sv]
 

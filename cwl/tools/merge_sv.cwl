@@ -18,6 +18,7 @@ inputs:
   input_sv: File
   input_previous_merged_sv: File
   biospecimen_id: string
+  run_WGS_or_WXS: { type: { type: 'enum', name: run_WGS_or_WXS, symbols: ["WGS", "WXS"] } }
 outputs:
   output_merged_sv:
     type: File
