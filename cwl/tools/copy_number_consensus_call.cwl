@@ -19,8 +19,8 @@ arguments:
       --snake  /scratch/config_snakemake.yaml 
       --scratch /scratch
       --uncalled ./results/uncalled_samples.tsv
-      $(inputs.run_WGS_or_WXS == 'WGS' ? '--manta ' + inputs.input_formatted_mantaSV.path : '')
-      && snakemake -s /d3b-bixu-data-assembly/scripts/copy_number_consensus_call/$(inputs.run_WGS_or_WXS == 'WGS' ? 'Snakefile' : 'Snakefile_WXS') 
+      --manta $(inputs.input_formatted_mantaSV.path)
+      && snakemake -s /d3b-bixu-data-assembly/scripts/copy_number_consensus_call/Snakefile 
       --configfile /scratch/config_snakemake.yaml 
       -j 
       --restart-times 2 
@@ -34,6 +34,6 @@ inputs:
 
 outputs:
   output_consensus_seg:
-    type: File
+    type: File?
     outputBinding:
       glob: '*consensus.seg.gz'

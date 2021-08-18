@@ -1,6 +1,6 @@
 class: CommandLineTool
 cwlVersion: v1.0
-id: merge_seg
+id: merge_sv
 requirements:
   - class: ShellCommandRequirement
   - class: InlineJavascriptRequirement
@@ -13,14 +13,14 @@ arguments:
     valueFrom: >-
       set -eo pipefail
 
-      egrep -v "loc.start" $(inputs.input_seg.path) |gzip >temp.gz && cat $(inputs.input_previous_merged_seg.path) temp.gz > pbta-cnv-consensus.$(inputs.biospecimen_id).seg.gz && rm temp.gz
+      zgrep -v "AnnotSV.ID" $(inputs.input_sv.path) |gzip >temp.gz && cat $(inputs.input_previous_merged_sv.path) temp.gz > pbta-sv-manta.$(inputs.biospecimen_id).tsv.gz && rm temp.gz
 inputs:
-  input_seg: File?
-  input_previous_merged_seg: File?
+  input_sv: File
+  input_previous_merged_sv: File
   biospecimen_id: string
   run_WGS_or_WXS: { type: { type: 'enum', name: run_WGS_or_WXS, symbols: ["WGS", "WXS"] } }
 outputs:
-  output_merged_seg:
+  output_merged_sv:
     type: File
     outputBinding:
       glob: '*.gz'
