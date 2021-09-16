@@ -17,12 +17,15 @@ inputs:
   input_cnvkit_call_seg: { type: "File" }
   input_controlfreeC_p_value: { type: "File" }
   input_controlfreeC_info: { type: "File" }
-  input_previous_merged_seg: {type: "File"}
+  input_previous_merged_seg: {type: "File?"}
   histology_file: {type: "File"}
-  gtf_file: {type: "File"}
   gtf_annote_db: {type: "File"}
   input_previous_merged_cnvkit: {type: "File"}
   input_previous_merged_controlfreec: {type: "File"}
+
+  #SV
+
+  input_previous_merged_sv: {type: "File"}
 
   participant_id: "string"
   biospecimen_id_tumor: "string"
@@ -38,11 +41,11 @@ outputs:
 
  # formatted_cnvkit: { type: "File", outputSource: format_cnvkit_cnv/output_formatted_cnvkit }
  # formatted_controlfreec: { type: "File", outputSource: format_controlfreeC_cnv/output_formatted_controlfreeC }
-  formatted_sv: { type: "File?", outputSource: format_annoSV/output_formatted_annoSV }
+  new_merged_sv: { type: "File?", outputSource: merge_sv/output_merged_sv }
   
   new_merged_cnvkit: { type: "File", outputSource: merge_cnvkit/output_merged_cnvkit}
   new_merged_controlfreec: { type: "File", outputSource: merge_controlfreec/output_merged_controlfreec}
-  new_merged_consensus_seg: { type: "File", outputSource: merge_seg/output_merged_seg}
+  new_merged_consensus_seg: { type: "File?", outputSource: merge_seg/output_merged_seg}
 
   consensus_seg_annotated_cn: {type: "File", outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn}
   consensus_seg_annotated_cn_x_and_y: {type: "File", outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn_x_and_y}
@@ -108,6 +111,16 @@ steps:
       biospecimen_id: biospecimen_id_tumor
     out: [output_merged_controlfreec]
 
+  merge_sv:
+    run: ../tools/merge_sv.cwl
+    in:
+      input_sv: format_annoSV/output_formatted_annoSV
+      input_previous_merged_sv: input_previous_merged_sv
+      biospecimen_id: biospecimen_id_tumor
+      run_WGS_or_WXS: run_WGS_or_WXS
+    when: $(inputs.run_WGS_or_WXS == "WGS")
+    out: [output_merged_sv]
+
   copy_number_consensus_call:
     run: ../tools/copy_number_consensus_call.cwl
     in:
@@ -115,6 +128,7 @@ steps:
       input_formatted_controlfreeC: format_controlfreeC_cnv/output_formatted_controlfreeC
       input_formatted_mantaSV: format_annoSV/output_formatted_annoSV
       run_WGS_or_WXS: run_WGS_or_WXS
+    when: $(inputs.run_WGS_or_WXS == "WGS")
     out: [output_consensus_seg]
 
   merge_seg:
@@ -123,6 +137,8 @@ steps:
       input_seg: copy_number_consensus_call/output_consensus_seg
       input_previous_merged_seg: input_previous_merged_seg
       biospecimen_id: biospecimen_id_tumor
+      run_WGS_or_WXS: run_WGS_or_WXS
+    when: $(inputs.run_WGS_or_WXS == "WGS")
     out: [output_merged_seg]
   
   focal-cn-file-preparation:
@@ -130,9 +146,10 @@ steps:
     in:
       consensus_seg_file: merge_seg/output_merged_seg
       histology_file: histology_file
-      gtf_file: gtf_file
       gtf_annote_db: gtf_annote_db
       biospecimen_id: biospecimen_id_tumor
+      merged_cnvkit: merge_cnvkit/output_merged_cnvkit
+      run_WGS_or_WXS: run_WGS_or_WXS
     out: [consensus_seg_annotated_cn,consensus_seg_annotated_cn_x_and_y]
 
 $namespaces:
