@@ -33,11 +33,61 @@ cnvkit_df <- readr::read_tsv(cnvkit_file)
 histologies_file <- opt$histology_file
 histologies_df <- readr::read_tsv(histologies_file, guess_max = 100000)
 
-add_ploidy_df <- histologies_df %>%
+
+# Filter to WXS tumor with no germline sex estimate
+no_estimate <- histologies_df %>%
+  filter(sample_type == "Tumor" & experimental_strategy == "WXS" &
+           is.na(germline_sex_estimate)) %>%
+  select(-germline_sex_estimate)
+
+# Extract participant ID with no germline sex estimate
+no_estimate_participants <- no_estimate %>%
+  pull(Kids_First_Participant_ID) %>%
+  unique()
+
+# Find out matching WGS
+# Use Kids_First_Participant_ID for filtering samples that have WGS, when WXS was performed
+no_estimate_participants_match_wgs <- histologies_df %>%
+  filter(Kids_First_Participant_ID %in% no_estimate_participants &
+           experimental_strategy == "WGS" & sample_type == "Tumor") %>%
+  select(Kids_First_Participant_ID, germline_sex_estimate)
+
+# Merge data that was fixed with WGS germline sex estimate
+no_estimate_fixed_through_wgs <- left_join(no_estimate, no_estimate_participants_match_wgs
+                                           , by = "Kids_First_Participant_ID") %>%
+  filter(!is.na(germline_sex_estimate))
+
+# Identify data that was not fixed due to NA
+no_estimate_still_na <- left_join(no_estimate, no_estimate_participants_match_wgs
+                                  , by = "Kids_First_Participant_ID") %>%
+  filter(is.na(germline_sex_estimate))
+
+# Fix NA data using gender
+no_estimate_still_na_fixed <- no_estimate_still_na %>%
+  mutate(germline_sex_estimate = case_when(
+                                  reported_gender == "Female" ~ "Female",
+                                  reported_gender == "Male" ~ "Male",
+                                  TRUE ~ as.character(NA))
+         )
+no_estimate_fixed_through_wgs$germline_sex_estimate <- as.character(no_estimate_fixed_through_wgs$germline_sex_estimate)
+
+# Merge back fixed_wgs, fixed_na, and exist_germline_estimate data
+histologies_df_fixed <- bind_rows(no_estimate_fixed_through_wgs, no_estimate_still_na_fixed)
+
+# remove samples in histologies_df_fixed from histologies_df
+histologies_df_rm <- histologies_df %>%
+  anti_join(histologies_df_fixed, by = "Kids_First_Biospecimen_ID")
+
+histologies_df_rm$germline_sex_estimate <- as.character(histologies_df_rm$germline_sex_estimate)
+
+# add new rows back
+histologies_df_final <- histologies_df_rm %>%
+  bind_rows(histologies_df_fixed)
+
+add_ploidy_df <- histologies_df_final  %>%
   select(Kids_First_Biospecimen_ID, tumor_ploidy, germline_sex_estimate) %>%
   inner_join(cnvkit_df, by = c("Kids_First_Biospecimen_ID" = "ID")) %>%
   select(-tumor_ploidy, -germline_sex_estimate, everything())
-
 
 add_autosomes_df <- add_ploidy_df %>%
   # x and y chromosomes must be handled differently
@@ -49,6 +99,7 @@ add_autosomes_df <- add_ploidy_df %>%
     copy.num > tumor_ploidy ~ "gain",
     copy.num == tumor_ploidy ~ "neutral"
   ))
+
 
 # this logic is consistent with what is observed in the controlfreec file
 # specifically, in samples where germline sex estimate = Female, X chromosomes
