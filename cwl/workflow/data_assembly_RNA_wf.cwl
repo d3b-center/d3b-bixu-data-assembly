@@ -18,6 +18,10 @@ inputs:
   old_rsem_count: { type: File }
   old_rsem_fpkm: { type: File }
   old_rsem_tpm: { type: File }
+  old_rsem_count_2: { type: File }
+  old_rsem_fpkm_2: { type: File }
+  old_rsem_tpm_2: { type: File }
+
   library:  {type: ['null', {type: enum, name: library, symbols: ["polya", "stranded"]}]}
 
   biospecimen_id_RNA: string
@@ -29,6 +33,11 @@ outputs:
   new_merged_rsem_count: { type: File, outputSource: merge_rsem/output_merged_rsem_count }
   new_merged_fpkm: { type: File, outputSource: merge_rsem/output_merged_fpkm }
   new_merged_tpm: {type: File, outputSource: merge_rsem/output_merged_tpm}
+
+  new_merged_rsem_count_stranded_and_polya: { type: File, outputSource: merge_stranded_polya/output_merged_rsem_count }
+  new_merged_fpkm_stranded_and_polya: { type: File, outputSource: merge_stranded_polya/output_merged_fpkm }
+  new_merged_tpm_stranded_and_polya: {type: File, outputSource: merge_stranded_polya/output_merged_tpm}
+
 
 steps:
   format_fusion:
@@ -65,6 +74,18 @@ steps:
       old_rsem_fpkm: old_rsem_fpkm
       old_rsem_tpm: old_rsem_tpm
       library: library
+      biospecimen_id_RNA: biospecimen_id_RNA
+    out: [output_merged_rsem_count,output_merged_fpkm,output_merged_tpm]
+
+  merge_stranded_polya:
+    run: ../tools/merge_stranded_polya.cwl
+    in:
+      input_rsem_count_merged: merge_rsem/output_merged_rsem_count
+      input_rsem_fpkm_merged: merge_rsem/output_merged_fpkm
+      input_rsem_tpm_merged: merge_rsem/output_merged_tpm
+      old_rsem_count_2: old_rsem_count_2
+      old_rsem_fpkm_2: old_rsem_fpkm_2
+      old_rsem_tpm_2: old_rsem_tpm_2
       biospecimen_id_RNA: biospecimen_id_RNA
     out: [output_merged_rsem_count,output_merged_fpkm,output_merged_tpm]
 
