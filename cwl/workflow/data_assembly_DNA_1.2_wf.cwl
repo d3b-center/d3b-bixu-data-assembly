@@ -25,7 +25,7 @@ inputs:
 
   #SV
 
-  input_previous_merged_sv: {type: "File"}
+  input_previous_merged_sv: {type: "File?"}
 
   participant_id: "string"
   biospecimen_id_tumor: "string"
