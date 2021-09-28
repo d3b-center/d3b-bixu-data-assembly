@@ -23,6 +23,9 @@ inputs:
   input_previous_merged_cnvkit: {type: "File"}
   input_previous_merged_controlfreec: {type: "File"}
 
+  input_previous_consensus_seg: {type: "File"}
+  input_previous_consensus_seg_x_y: {type: "File"}
+
   #SV
 
   input_previous_merged_sv: {type: "File?"}
@@ -49,6 +52,7 @@ outputs:
 
   consensus_seg_annotated_cn: {type: "File", outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn}
   consensus_seg_annotated_cn_x_and_y: {type: "File", outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn_x_and_y}
+  output_merged_consensus_seg_annotated_cn_and_x_y: {type: "File", outputSource: merge_consensus_seg_annotated/output_merged_consensus_seg_annotated_cn_and_x_y}
 
 steps:
   merge_maf:
@@ -151,6 +155,16 @@ steps:
       merged_cnvkit: merge_cnvkit/output_merged_cnvkit
       run_WGS_or_WXS: run_WGS_or_WXS
     out: [consensus_seg_annotated_cn,consensus_seg_annotated_cn_x_and_y]
+
+  merge_consensus_seg_annotated:
+    run: ../tools/merge_consensus_seg_annotated.cwl
+    in:
+      input_previous_consensus_seg: input_previous_consensus_seg
+      input_previous_consensus_seg_x_y: input_previous_consensus_seg_x_y
+      consensus_seg_annotated_cn: focal-cn-file-preparation/consensus_seg_annotated_cn
+      consensus_seg_annotated_cn_x_and_y: focal-cn-file-preparation/consensus_seg_annotated_cn_x_and_y
+      biospecimen_id: biospecimen_id_tumor
+    out: [output_merged_consensus_seg_annotated_cn_and_x_y]
 
 $namespaces:
   sbg: https://sevenbridges.com
