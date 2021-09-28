@@ -15,8 +15,8 @@ arguments:
 
       zgrep -v "AnnotSV.ID" $(inputs.input_sv.path) |gzip >temp.gz && cat $(inputs.input_previous_merged_sv.path) temp.gz > pbta-sv-manta.$(inputs.biospecimen_id).tsv.gz && rm temp.gz
 inputs:
-  input_sv: File
-  input_previous_merged_sv: File
+  input_sv: File?
+  input_previous_merged_sv: File?
   biospecimen_id: string
   run_WGS_or_WXS: { type: { type: 'enum', name: run_WGS_or_WXS, symbols: ["WGS", "WXS"] } }
 outputs:
