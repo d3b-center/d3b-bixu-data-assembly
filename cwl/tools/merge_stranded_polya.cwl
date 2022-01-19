@@ -11,9 +11,9 @@ arguments:
   - position: 0
     shellQuote: false
     valueFrom: >-
-      --matrices $(inputs.input_rsem_count_merged.path),$(inputs.old_rsem_count_2.path) --outfile gene-counts-rsem-expected_count.$(inputs.biospecimen_id_RNA).rds 
-      && Rscript /d3b-bixu-data-assembly/scripts/merge_rsem/combine-matrices.R --matrices $(inputs.input_rsem_fpkm_merged.path),$(inputs.old_rsem_fpkm_2.path) --outfile gene-expression-rsem-fpkm.$(inputs.biospecimen_id_RNA).rds 
-      && Rscript /d3b-bixu-data-assembly/scripts/merge_rsem/combine-matrices.R --matrices $(inputs.input_rsem_tpm_merged.path),$(inputs.old_rsem_tpm_2.path) --outfile gene-expression-rsem-tpm.$(inputs.biospecimen_id_RNA).rds 
+      --matrices $(inputs.input_rsem_count_merged.path),$(inputs.old_rsem_count_2.path) --collapsed FALSE --outfile gene-counts-rsem-expected_count.$(inputs.biospecimen_id_RNA).rds 
+      && Rscript /d3b-bixu-data-assembly/scripts/merge_rsem/combine-matrices.R --matrices $(inputs.input_rsem_fpkm_merged.path),$(inputs.old_rsem_fpkm_2.path) --collapsed FALSE --outfile gene-expression-rsem-fpkm.$(inputs.biospecimen_id_RNA).rds 
+      && Rscript /d3b-bixu-data-assembly/scripts/merge_rsem/combine-matrices.R --matrices $(inputs.input_rsem_tpm_merged.path),$(inputs.old_rsem_tpm_2.path) --collapsed FALSE --outfile gene-expression-rsem-tpm.$(inputs.biospecimen_id_RNA).rds 
 inputs:
   input_rsem_count_merged: File
   input_rsem_fpkm_merged: File
