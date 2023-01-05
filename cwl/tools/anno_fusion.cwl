@@ -11,7 +11,7 @@ arguments:
   - position: 0
     shellQuote: false
     valueFrom: >-
-      $(inputs.FusionGenome.path) && /opt/FusionAnnotator/FusionAnnotator --genome_lib_dir ./GRCh38_v27_CTAT_lib_Feb092018/ctat_genome_lib_build_dir --annotate $(inputs.output_formatted_arriba.path) --fusion_name_col 25 > $(inputs.biospecimens_id).arriba_formatted.annotated.tsv
+      $(inputs.FusionGenome.path) && /opt/FusionAnnotator/FusionAnnotator --genome_lib_dir ./GRCh38_v39_CTAT_lib_Mar242022.CUSTOM --annotate $(inputs.output_formatted_arriba.path) --fusion_name_col 31 > $(inputs.biospecimens_id).arriba_formatted.annotated.tsv
 inputs:
   FusionGenome: File
   output_formatted_arriba: File
