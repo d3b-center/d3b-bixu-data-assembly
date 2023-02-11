@@ -18,7 +18,7 @@ inputs:
   old_rsem_count: File
   old_rsem_fpkm: File
   old_rsem_tpm: File
-  library:  {type: ['null', {type: enum, name: library, symbols: ["polya", "stranded"]}]}
+  library:  {type: ['null', {type: enum, name: library, symbols: ["polya", "stranded", "all"]}]}
   biospecimen_id_RNA: string
 outputs:
   output_merged_rsem_count:

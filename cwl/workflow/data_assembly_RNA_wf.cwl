@@ -18,7 +18,7 @@ inputs:
   old_rsem_count: { type: File }
   old_rsem_fpkm: { type: File }
   old_rsem_tpm: { type: File }
-  library:  {type: ['null', {type: enum, name: library, symbols: ["polya", "stranded"]}]}
+  library:  {type: ['null', {type: enum, name: library, symbols: ["polya", "stranded", "all"]}]}
 
   biospecimen_id_RNA: string
 
