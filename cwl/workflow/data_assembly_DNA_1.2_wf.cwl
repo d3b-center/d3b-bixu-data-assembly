@@ -13,16 +13,19 @@ inputs:
   
   # CNV
   input_SV: { type: "File?" }
+  input_gatk: { type: "File?" }
   input_cnvkit_call_cns: { type: "File" }
   input_cnvkit_call_seg: { type: "File" }
   input_controlfreeC_p_value: { type: "File" }
   input_controlfreeC_info: { type: "File" }
+  input_gainloss: { type: "File" }
   input_previous_merged_seg: {type: "File?"}
   histology_file: {type: "File"}
-  gtf_annote_db: {type: "File"}
+  gtf_file: {type: "File"}
+
   input_previous_merged_cnvkit: {type: "File"}
   input_previous_merged_controlfreec: {type: "File"}
-
+  input_previous_merged_gainloss : {type: "File"}
   input_previous_consensus_seg: {type: "File"}
   input_previous_consensus_seg_x_y: {type: "File"}
 
@@ -53,6 +56,7 @@ outputs:
   consensus_seg_annotated_cn: {type: "File", outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn}
   consensus_seg_annotated_cn_x_and_y: {type: "File", outputSource: focal-cn-file-preparation/consensus_seg_annotated_cn_x_and_y}
   output_merged_consensus_seg_annotated_cn_and_x_y: {type: "File", outputSource: merge_consensus_seg_annotated/output_merged_consensus_seg_annotated_cn_and_x_y}
+  new_merged_gainloss: {type: "File", outputSource: merge_gailoss/output_merged_gainloss}
 
 steps:
   merge_maf:
@@ -106,6 +110,14 @@ steps:
       input_controlfreeC_info: input_controlfreeC_info
       biospecimen_id: biospecimen_id_tumor
     out: [output_formatted_controlfreeC]
+
+  format_format_gainloss:
+    run: ../tools/format_gainloss.cwl
+    in:
+      input_gainloss: input_gainloss
+      biospecimen_id: biospecimen_id_tumor
+    out:  [output_formatted_gailoss]
+
   
   merge_controlfreec:
     run: ../tools/merge_controlfreeC.cwl
@@ -114,6 +126,16 @@ steps:
       input_previous_merged_controlfreec: input_previous_merged_controlfreec
       biospecimen_id: biospecimen_id_tumor
     out: [output_merged_controlfreec]
+
+
+  merge_gailoss:
+    run: ../tools/merge_gailoss.cwl
+    in:
+      input_gainloss: format_format_gainloss/output_formatted_gailoss
+      input_previous_merged_gainloss: input_previous_merged_gainloss
+      biospecimen_id: biospecimen_id_tumor
+    out: [output_merged_gainloss]
+
 
   merge_sv:
     run: ../tools/merge_sv.cwl
@@ -130,7 +152,8 @@ steps:
     in:
       input_formatted_cnvkit: format_cnvkit_cnv/output_formatted_cnvkit
       input_formatted_controlfreeC: format_controlfreeC_cnv/output_formatted_controlfreeC
-      input_formatted_mantaSV: format_annoSV/output_formatted_annoSV
+      input_gatk: input_gatk
+      histology_file: histology_file
       run_WGS_or_WXS: run_WGS_or_WXS
     when: $(inputs.run_WGS_or_WXS == "WGS")
     out: [output_consensus_seg]
@@ -150,7 +173,7 @@ steps:
     in:
       consensus_seg_file: merge_seg/output_merged_seg
       histology_file: histology_file
-      gtf_annote_db: gtf_annote_db
+      gtf_file: gtf_file
       biospecimen_id: biospecimen_id_tumor
       merged_cnvkit: merge_cnvkit/output_merged_cnvkit
       run_WGS_or_WXS: run_WGS_or_WXS

@@ -6,16 +6,13 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: DockerRequirement
     dockerPull: 'zhangb1/data-assembly'
-baseCommand: ["/bin/bash -c"]
+baseCommand: [mkdir]
 arguments:
   - position: 0
     shellQuote: false
     valueFrom: >-
-      set -eo pipefail
-
-      zgrep -v "biospecimen_id" $(inputs.consensus_seg_annotated_cn.path) |gzip >temp.gz && cat $(inputs.input_previous_consensus_seg.path) temp.gz > consensus_wgs_plus_cnvkit_wxs_autosomes.$(inputs.biospecimen_id).tsv.gz && rm temp.gz
-      &&  zgrep -v "biospecimen_id" $(inputs.consensus_seg_annotated_cn_x_and_y.path) |gzip >temp.gz && cat $(inputs.input_previous_consensus_seg_x_y.path) temp.gz > consensus_wgs_plus_cnvkit_wxs_x_and_y.$(inputs.biospecimen_id).tsv.gz && rm temp.gz
-      &&  gunzip consensus_wgs_plus_cnvkit_wxs_x_and_y.$(inputs.biospecimen_id).tsv.gz && less consensus_wgs_plus_cnvkit_wxs_x_and_y.$(inputs.biospecimen_id).tsv |cut -f1-7 |grep -v "biospecimen_id" |gzip >temp.gz && cat consensus_wgs_plus_cnvkit_wxs_autosomes.$(inputs.biospecimen_id).tsv.gz temp.gz > consensus_wgs_plus_cnvkit_wxs.$(inputs.biospecimen_id).tsv.gz
+        results && Rscript /d3b-bixu-data-assembly/scripts/focal-cn-file-preparation/07-consensus-annotated-merge.R --cnvkit_auto $(inputs.consensus_seg_annotated_cn.path)  --cnvkit_x_and_y $(inputs.consensus_seg_annotated_cn_x_and_y.path)  --consensus_auto $(inputs.input_previous_consensus_seg.path)    --consensus_x_and_y $(inputs.input_previous_consensus_seg_x_y.path)  --outdir ./results
+        && cp ./results/consensus_wgs_plus_cnvkit_wxs.tsv.gz consensus_wgs_plus_cnvkit_wxs.$(inputs.biospecimen_id).tsv.gz
 
 inputs:
   input_previous_consensus_seg: File

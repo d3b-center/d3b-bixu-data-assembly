@@ -1,7 +1,7 @@
 
 
 # Set up
-scratch_dir = "./scratch"
+scratch_dir = "../../scratch"
 cytoband_dir = scratch_dir + "/cytoband_status"
 
 # Get the lists of samples to analyze

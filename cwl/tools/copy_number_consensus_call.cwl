@@ -19,7 +19,8 @@ arguments:
       --snake  /scratch/config_snakemake.yaml 
       --scratch /scratch
       --uncalled ./results/uncalled_samples.tsv
-      --manta $(inputs.input_formatted_mantaSV.path)
+      --gatk $(inputs.input_gatk.path)i
+      --histologies $(inputs.histology_file.path)
       && snakemake -s /d3b-bixu-data-assembly/scripts/copy_number_consensus_call/Snakefile 
       --configfile /scratch/config_snakemake.yaml 
       -j 
@@ -29,7 +30,8 @@ arguments:
 inputs:
   input_formatted_cnvkit: File
   input_formatted_controlfreeC: File
-  input_formatted_mantaSV: File?
+  histology_file : File
+  input_gatk: File?
   run_WGS_or_WXS: { type: { type: 'enum', name: run_WGS_or_WXS, symbols: ["WGS", "WXS"] } }
 
 outputs:

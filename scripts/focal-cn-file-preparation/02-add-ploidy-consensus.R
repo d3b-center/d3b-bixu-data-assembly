@@ -35,27 +35,40 @@ histologies_file <- opt$histology_file
 consensus_seg_df <- read_tsv(consensus_seg_file)
 
 
-histologies_df <- read_tsv(histologies_file,
-                           col_types = cols(
-                             molecular_subtype = col_character()
-                           ))
+# histologies_df <- read_tsv(histologies_file,
+#                            col_types = cols(
+#                              molecular_subtype = col_character()
+#                            ))
+
+histologies_df <- read_csv(histologies_file,col_types = cols(molecular_subtype = col_character()))
+#histologies_df <- read.table(histologies_file,sep=',',header = TRUE, stringsAsFactors = FALSE)
 
 consensus_seg_df %>%
   filter(is.na(copy.num)) %>%
   group_by(chrom) %>%
   tally()
+colnames(consensus_seg_df)[colnames(consensus_seg_df) == 'ID'] <- 'Kids_First_Biospecimen_ID'
 
+sub_his <- select(histologies_df, 
+                  Kids_First_Biospecimen_ID, 
+                  tumor_ploidy,
+                  germline_sex_estimate)
+print(sub_his)
 add_ploidy_df <- consensus_seg_df %>%
   filter(!is.na(copy.num)) %>%
-  inner_join(select(histologies_df, 
-                    Kids_First_Biospecimen_ID, 
-                    tumor_ploidy,
-                    germline_sex_estimate), 
-             by = c("ID" = "Kids_First_Biospecimen_ID")) %>%
-  select(-tumor_ploidy, -germline_sex_estimate, everything())
+  inner_join(sub_his, by = "Kids_First_Biospecimen_ID") %>%
+             select(-tumor_ploidy, -germline_sex_estimate, everything())
+print(add_ploidy_df)
+# add_ploidy_df <- consensus_seg_df %>%
+#   filter(!is.na(copy.num)) %>%
+#   inner_join(select(histologies_df, 
+#                     Kids_First_Biospecimen_ID, 
+#                     tumor_ploidy,
+#                     germline_sex_estimate), 
+#              by = c("ID" = "Kids_First_Biospecimen_ID")) %>%
+#   select(-tumor_ploidy, -germline_sex_estimate, everything())
 
-
-  add_autosomes_df <- add_ploidy_df %>%
+add_autosomes_df <- add_ploidy_df %>%
   # x and y chromosomes must be handled differently
   filter(!(chrom %in% c("chrX", "chrY"))) %>%
   mutate(status = case_when(
@@ -86,8 +99,11 @@ add_xy_df <- add_ploidy_df %>%
   ))
 
 add_status_df <- bind_rows(add_autosomes_df, add_xy_df) %>%
-  select(-germline_sex_estimate) %>%
-  rename(Kids_First_Biospecimen_ID = ID)
+  select(-germline_sex_estimate)
+
+# add_status_df <- bind_rows(add_autosomes_df, add_xy_df) %>%
+#   select(-germline_sex_estimate) %>%
+#   rename(Kids_First_Biospecimen_ID = ID)
 
 add_status_df %>%
   filter(!is.na(seg.mean)) %>%
@@ -133,7 +149,6 @@ names(bed_gain_list) <- gains_bed_status_df %>%
   group_keys() %>%
   pull(Kids_First_Biospecimen_ID)
 
-
 temp <- purrr::imap(bed_status_list,
                     ~ write_tsv(.x,
                                 file.path(
@@ -141,19 +156,30 @@ temp <- purrr::imap(bed_status_list,
                                 ),
                                 col_names = FALSE))
 
-temp_loss <- purrr::imap(bed_loss_list,
+if (length(bed_loss_list) == 0) {
+    bed_loss_list <- data.frame()
+    write_tsv(bed_loss_list, file.path(output_dir, paste0("consensus_loss.empty.bed")))
+} else {
+  temp_loss <- purrr::imap(bed_loss_list,
                          ~ write_tsv(.x,
                                      file.path(
                                        output_dir, paste0("consensus_loss.", .y, ".bed")
                                      ),
                                      col_names = FALSE))
+}
 
-temp_gain <- purrr::imap(bed_gain_list,
+if (length(bed_gain_list) == 0) {
+  bed_gain_list <- data.frame()
+  write_tsv(bed_gain_list,file.path(output_dir, paste0("consensus_gain.empty.bed")))
+} else {
+  temp_gain <- purrr::imap(bed_gain_list,
                          ~ write_tsv(.x,
                                      file.path(
                                        output_dir, paste0("consensus_gain.", .y, ".bed")
                                      ),
                                      col_names = FALSE))
+}
+
 
 sessionInfo()
 
