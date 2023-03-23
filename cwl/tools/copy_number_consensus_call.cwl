@@ -19,7 +19,7 @@ arguments:
       --snake  /scratch/config_snakemake.yaml 
       --scratch /scratch
       --uncalled ./results/uncalled_samples.tsv
-      --gatk $(inputs.input_gatk.path)i
+      --gatk $(inputs.input_gatk.path)
       --histologies $(inputs.histology_file.path)
       && snakemake -s /d3b-bixu-data-assembly/scripts/copy_number_consensus_call/Snakefile 
       --configfile /scratch/config_snakemake.yaml 
